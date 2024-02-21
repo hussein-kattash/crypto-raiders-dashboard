@@ -42,36 +42,39 @@ const Ads = () => {
         className="cards"
         sx={{ padding: "30px", placeItems: "center" }}
       >
-        {ads.length > 0 ? ads.map((ad) => (
+        {ads.length > 0 && ads.map((ad) => (
           <Grid2 xs={3} sm={12} md={6} lg={6} key={ad._id}>
             <Adss image={ad.image} id={ad._id} link={ad.link}/>
           </Grid2>
-        )):(
+        )) 
+       }
+       {
+        (ads.length === 0 && !loading) && (
           <Box
+          sx={{
+            m: "30px auto",
+            width: "80%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Alert
             sx={{
-              m: "30px auto",
-              width: "80%",
+              height: "60px",
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
+              fontSize: "20px",
+              width: "100%",
             }}
+            severity="info"
           >
-            <Alert
-              sx={{
-                height: "60px",
-                display: "flex",
-                alignItems: "center",
-                fontSize: "20px",
-                width: "100%",
-              }}
-              severity="info"
-            >
-              لا يوجد إعلانات في الوقت الحالي <Link to="/add-ads">اضغط هنا</Link>{" "}
-              لإضافة إعلان جديد
-            </Alert>
-          </Box>
+            لا يوجد إعلانات في الوقت الحالي <Link to="/add-ads">اضغط هنا</Link>{" "}
+            لإضافة إعلان جديد
+          </Alert>
+        </Box>
         )
-      }
+       }
       </Grid2>
     </div>
   );

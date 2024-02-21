@@ -9,15 +9,15 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 
 const Partners = () => {
   const { error, loading, getAllPartners } = useGetAllPartners();
-  const {partners} = useContext(PostsContext);
+  const { partners } = useContext(PostsContext);
 
-  useEffect(()=>{
+  useEffect(() => {
     getAllPartners();
-  },[])
-  
+  }, []);
+
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       {error && (
         <Alert sx={{ mt: "10px" }} severity="error">
           {error}
@@ -42,11 +42,19 @@ const Partners = () => {
         className="cards"
         sx={{ padding: "30px", placeItems: "center" }}
       >
-        {partners.length > 0 ? partners.map((partner) => (
-          <Grid2 xs={3} sm={12} md={6} lg={6} key={partner._id}>
-            <Partner name={partner.name} image={partner.image} id={partner._id} link={partner.link}/>
-          </Grid2>
-        )):(
+        {partners.length > 0 &&
+          !loading &&
+          partners.map((partner) => (
+            <Grid2 xs={3} sm={12} md={6} lg={6} key={partner._id}>
+              <Partner
+                name={partner.name}
+                image={partner.image}
+                id={partner._id}
+                link={partner.link}
+              />
+            </Grid2>
+          ))}
+        {partners.length === 0 && !loading && (
           <Box
             sx={{
               m: "30px auto",
@@ -66,15 +74,14 @@ const Partners = () => {
               }}
               severity="info"
             >
-              لا يوجد شراكات في الوقت الحالي <Link to="/add-partner">اضغط هنا</Link>{" "}
-              لإضافة شراكة جديد
+              لا يوجد شراكات في الوقت الحالي{" "}
+              <Link to="/add-partner">اضغط هنا</Link> لإضافة شراكة جديد
             </Alert>
           </Box>
-        )
-      }
+        )}
       </Grid2>
     </div>
-  )
-}
+  );
+};
 
-export default Partners
+export default Partners;

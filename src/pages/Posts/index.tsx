@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar";
 import PostCard from "../../components/Card";
 import "./index.scss";
 import { Alert, Box, CircularProgress } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Unstable_Grid2";
 import { useGetAllPosts } from "../../hooks/useGetAllPosts";
 import { PostResponse } from "../../hooks/useGetAllPosts";
 import { Link, useNavigate } from "react-router-dom";
@@ -60,11 +60,11 @@ const Posts = () => {
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 3, sm: 9, md: 12, lg:8 }}
+        columns={{ xs: 3, sm: 9, md: 12, lg: 8 }}
         className="cards"
-        sx={{ padding: "30px", placeItems:'center'}}
+        sx={{ padding: "30px", placeItems: "center" }}
       >
-        {filteredPosts.length > 0 ? (
+        {(filteredPosts.length > 0 && !loading) &&
           filteredPosts.map((post: PostResponse) => (
             <Grid xs={3} sm={4} md={4} lg={2} key={post._id}>
               <PostCard
@@ -76,8 +76,8 @@ const Posts = () => {
                 title={post.title.ar}
               />
             </Grid>
-          ))
-        ) : (
+          ))}
+        {(filteredPosts.length === 0 && !loading) && (
           <Box
             sx={{
               m: "30px auto",
@@ -97,8 +97,8 @@ const Posts = () => {
               }}
               severity="info"
             >
-              لا توجد مقالات في الوقت الحالي <Link to="/add-post">اضغط هنا</Link>{" "}
-              لإضافة مقالة جديدة
+              لا توجد مقالات في الوقت الحالي{" "}
+              <Link to="/add-post">اضغط هنا</Link> لإضافة مقالة جديدة
             </Alert>
           </Box>
         )}
