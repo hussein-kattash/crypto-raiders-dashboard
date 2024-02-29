@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import apiClient from "../services/api-client";
 import { PostsContext } from "../context/PostsContext";
 
-export class PostResponse {
+export class PostModel {
   _id: string = "";
   title: {
     ar: string;
@@ -24,23 +24,32 @@ export class PostResponse {
   updatedAt: string = "";
 }
 
+interface Response{
+  posts:PostModel[];
+  totalPages:number;
+}
+
+// Use a more specific type for the page parameter
 export const useGetAllPosts = () => {
-  const { setPosts } = useContext(PostsContext);
+  const { setPosts, setTotalPages } = useContext(PostsContext);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function getAllPost() {
+  // Use async and await syntax
+  async function getAllPost(page: number) {
     setLoading(true);
-    apiClient
-      .get<PostResponse[]>("/get-posts")
-      .then((res) => {
-        setPosts?.(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.response.data.message);
-        setLoading(false);
-      });
+    try {
+      // Use the API base URL and the template literal syntax
+      const res = await apiClient.get<Response>(`/get-posts/?page=${page}`);
+      // Use optional chaining and nullish coalescing operators
+      setTotalPages(res.data.totalPages)
+      setPosts?.(res.data.posts);
+      setLoading(false);
+    } catch (err:any) {
+      // Use optional chaining and nullish coalescing operators
+      setError(err.response?.data?.message ?? "Something went wrong");
+      setLoading(false);
+    }
   }
 
   return { error, loading, getAllPost };

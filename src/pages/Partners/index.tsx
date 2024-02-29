@@ -45,7 +45,7 @@ const Partners = () => {
         {partners.length > 0 &&
           !loading &&
           partners.map((partner) => (
-            <Grid2 xs={3} sm={12} md={6} lg={6} key={partner._id}>
+            <Grid2 xs={3} sm={12} md={6} lg={4} key={partner._id}>
               <Partner
                 name={partner.name}
                 image={partner.image}

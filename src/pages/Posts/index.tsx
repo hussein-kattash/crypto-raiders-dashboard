@@ -2,18 +2,24 @@
 import Navbar from "../../components/Navbar";
 import PostCard from "../../components/Card";
 import "./index.scss";
-import { Alert, Box, CircularProgress } from "@mui/material";
+import { Alert, Box, CircularProgress, Pagination } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useGetAllPosts } from "../../hooks/useGetAllPosts";
-import { PostResponse } from "../../hooks/useGetAllPosts";
+import { PostModel } from "../../hooks/useGetAllPosts";
 import { Link, useNavigate } from "react-router-dom";
 import { PostsContext } from "../../context/PostsContext";
 import { useContext, useEffect, useState } from "react";
 import SearchInput from "../../components/SearchInput";
 
 const Posts = () => {
-  const { posts } = useContext(PostsContext);
+  const { posts,totalPages } = useContext(PostsContext);
   const { loading, error, getAllPost } = useGetAllPosts();
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    event.preventDefault();
+    setPage(value);
+  };
+
   const navigate = useNavigate();
   // State to manage search text
   const [searchText, setSearchText] = useState("");
@@ -24,8 +30,8 @@ const Posts = () => {
   );
 
   useEffect(() => {
-    getAllPost();
-  }, []);
+    getAllPost(page);
+  }, [page, setPage]);
 
   return (
     <div className="posts">
@@ -47,7 +53,7 @@ const Posts = () => {
           <CircularProgress size={100} />
         </Box>
       )}
-      {posts.length > 0 && (
+      {(posts.length > 0 && !loading) && (
         <Box
           width={"100%"}
           mt={"20px"}
@@ -64,8 +70,9 @@ const Posts = () => {
         className="cards"
         sx={{ padding: "30px", placeItems: "center" }}
       >
-        {(filteredPosts.length > 0 && !loading) &&
-          filteredPosts.map((post: PostResponse) => (
+        {filteredPosts.length > 0 &&
+          !loading &&
+          filteredPosts.map((post: PostModel) => (
             <Grid xs={3} sm={4} md={4} lg={2} key={post._id}>
               <PostCard
                 categories={post.category.ar}
@@ -77,7 +84,7 @@ const Posts = () => {
               />
             </Grid>
           ))}
-        {(filteredPosts.length === 0 && !loading) && (
+        {filteredPosts.length === 0 && !loading && (
           <Box
             sx={{
               m: "30px auto",
@@ -103,6 +110,17 @@ const Posts = () => {
           </Box>
         )}
       </Grid>
+      {!loading && (
+        <Box display={"flex"} justifyContent={"center"} my={"20px"}>
+          <Pagination
+            page={page}
+            onChange={handleChange}
+            count={totalPages}
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
+      )}
     </div>
   );
 };

@@ -75,7 +75,7 @@ export default function PostCard({
       notify();
       handleClose();
       setTimeout(() => {
-        getAllPost();
+        getAllPost(1);
       }, 3000);
     } else {
       notify2();

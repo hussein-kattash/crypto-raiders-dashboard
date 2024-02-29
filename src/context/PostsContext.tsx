@@ -1,37 +1,47 @@
-import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
-import { PostResponse } from '../hooks/useGetAllPosts';
-import { AdsResponse } from '../hooks/useGetAllAds';
-import { MembersResponse } from '../hooks/useGetAllMembers';
-import { PartnersResponse } from '../hooks/useGetAllPartners';
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import { PostModel } from "../hooks/useGetAllPosts";
+import { AdsResponse } from "../hooks/useGetAllAds";
+import { MembersResponse } from "../hooks/useGetAllMembers";
+import { PartnersResponse } from "../hooks/useGetAllPartners";
 
 export interface PostsContextProps {
-  posts: PostResponse[];
-  post:PostResponse;
+  totalPages: number;
+  posts: PostModel[];
+  post: PostModel;
   ads: AdsResponse[];
-  members:MembersResponse[];
-  partners:PartnersResponse[];
-  member:MembersResponse;
+  members: MembersResponse[];
+  partners: PartnersResponse[];
+  member: MembersResponse;
+  setTotalPages: Dispatch<SetStateAction<number>>;
   setAds: Dispatch<SetStateAction<AdsResponse[]>>;
-  setPosts: Dispatch<SetStateAction<PostResponse[]>>;
+  setPosts: Dispatch<SetStateAction<PostModel[]>>;
   setMembers: Dispatch<SetStateAction<MembersResponse[]>>;
   setPartners: Dispatch<SetStateAction<PartnersResponse[]>>;
   setMember: Dispatch<SetStateAction<MembersResponse>>;
-  setPost: Dispatch<SetStateAction<PostResponse>>;
+  setPost: Dispatch<SetStateAction<PostModel>>;
 }
 
 export const PostsContext = createContext<PostsContextProps>({
+  totalPages: 0,
   posts: [],
-  post:{} as PostResponse,
+  post: {} as PostModel,
   ads: [],
   members: [],
-  partners:[],
-  member:{} as MembersResponse,
+  partners: [],
+  member: {} as MembersResponse,
   setAds: () => {},
   setPosts: () => {},
   setMembers: () => {},
   setMember: () => {},
   setPost: () => {},
-  setPartners:()=>{}
+  setPartners: () => {},
+  setTotalPages: () => {},
 });
 
 interface Props {
@@ -39,18 +49,34 @@ interface Props {
 }
 
 export const PostsProvider: React.FC<Props> = ({ children }) => {
-  const [posts, setPosts] = useState<PostResponse[]>([]);
+  const [posts, setPosts] = useState<PostModel[]>([]);
   const [ads, setAds] = useState<AdsResponse[]>([]);
   const [members, setMembers] = useState<MembersResponse[]>([]);
   const [member, setMember] = useState<MembersResponse>(new MembersResponse());
-  const [post, setPost] = useState<PostResponse>(new PostResponse());
+  const [post, setPost] = useState<PostModel>(new PostModel());
   const [partners, setPartners] = useState<PartnersResponse[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   return (
-    <PostsContext.Provider value={{post, setPost,member, partners, setPartners, setMember ,posts, setPosts, setAds, ads, members, setMembers }}>
+    <PostsContext.Provider
+      value={{
+        totalPages,
+        setTotalPages,
+        post,
+        setPost,
+        member,
+        partners,
+        setPartners,
+        setMember,
+        posts,
+        setPosts,
+        setAds,
+        ads,
+        members,
+        setMembers,
+      }}
+    >
       {children}
     </PostsContext.Provider>
   );
 };
-
-
