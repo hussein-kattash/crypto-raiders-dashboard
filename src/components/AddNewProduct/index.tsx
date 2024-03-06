@@ -22,6 +22,7 @@ import InputText from "../InputText";
 
 const categoriesAr = [
   "شروحات",
+  "هام",
   "مقالات",
   "أخبار",
   "التقنية",
@@ -34,6 +35,7 @@ const categoriesAr = [
 
 const categoriesEn = [
   "Tutorials",
+  "Important",
   "Articles",
   "News",
   "Technical",
@@ -45,6 +47,7 @@ const categoriesEn = [
 ];
 const categoriesRu = [
   "Инструкции",
+  "важный",
   "Статьи",
   "Новости",
   "Технический",
